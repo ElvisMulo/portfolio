@@ -13,9 +13,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 from decouple import config
-# import django_heroku
-# import dj_database_url
-# from decouple import config
+import django_heroku
+import dj_database_url
+
 
 
 # # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,7 +37,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0rt8r$jzo29p+g+*t)ej0xmt4b-0170^7=@b^icvd+%i6f20)9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -134,6 +134,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 # STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
@@ -150,11 +158,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Email Settings
 # DEBUG = config('DEBUG', default=False, cast=bool)
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' if not DEBUG else 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'elvismulowayi@gmail.com'
 EMAIL_HOST_PASSWORD = config('PORTFOLIO_EMAIL_PASSWORD')
+
+
+django_heroku.settings(locals())
 
